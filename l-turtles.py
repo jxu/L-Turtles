@@ -19,9 +19,10 @@ def l_system(V, w, P, n):
         
     return current
                 
-def run_turtle(var, start, rules, iters, angle):
+def run_turtle(var, start, rules, iters, angle, startdir=0):
     """Var, start, rules and iters, correspond to (V, w, P, n) of the 
     l-system function. The distance moved is scaled down from size.
+    The turtle starts facing startdir. 
     
     Instructions are defined as the following:
     F, G: Draw forward
@@ -37,7 +38,7 @@ def run_turtle(var, start, rules, iters, angle):
     terry.pensize(1)
     terry.pencolor("blue")
     terry.speed(0) # Instant speed
-    turtle.tracer(0, 0) # Don't draw anything yet
+    turtle.tracer(0, 0) # Don't draw anything yet (could change in future)
     turtle.setup(width=800, height=800, startx=None, starty=None) # Square pixels
     terry.hideturtle()
     
@@ -58,6 +59,7 @@ def run_turtle(var, start, rules, iters, angle):
         bounds[3] = max(bounds[3], coords[1])
     
     # Run turtle
+    terry.left(startdir) # Starting direction
     for instr in instructions:
         if instr in ('F', 'G'):
             terry.forward(dist)
@@ -74,8 +76,10 @@ def run_turtle(var, start, rules, iters, angle):
             angles.append(terry.heading())
             
         elif instr == ']':
+            terry.penup()
             terry.goto(positions.pop())
             terry.setheading(angles.pop())
+            terry.pendown()
             
         elif instr == '+':
             terry.left(angle)
@@ -108,8 +112,20 @@ def right_koch(iters):
 def dragon_curve(iters):
     run_turtle(('X', 'Y'), 'FX', {'X':'X+YF', 'Y':'FX-Y'}, iters, 90)
     
-dragon_curve(10)
+def sierpinski(iters):
+    run_turtle(('F', 'G'), 'F', {'F':'G-F-G', 'G':'F+G+F'},  iters, 60)
 
-            
-        
+def plant_1(iters):
+    run_turtle(('F', 'G'), 'F', {'G':'GG', 'F':'G[+F]-F'}, iters, 45, startdir=90)
+    
+def plant_2(iters):
+    l_args = (('X', 'F'), 'X', {'X':'F-[[X]+X]+F[+FX]-X', 'F':'FF'})
+    run_turtle(*l_args, iters=iters, angle=360-25, startdir=70)
+    
+def hilbert_curve(iters):
+    l_args = (('A', 'B'), 'A', {'A':'-BF+AFA+FB-', 'B':'+AF-BFB-FA+'})
+    run_turtle(*l_args, iters=iters, angle=90)
+    
+hilbert_curve(5)
+     
 
