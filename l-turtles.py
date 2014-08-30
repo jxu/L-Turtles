@@ -139,7 +139,12 @@ def plant_3(iters):
     run_turtle(('F', 'X'), 'X', {'X':'F[+X]F[-X]+X', 'F':'FF'}, iters,
                20, startdir=90)
     
-plant_3(7)
+def koch_burst(iters):
+    # Own design
+    run_turtle(('F'), 'F++F++F++F++F', {'F':'F+F--FF++F-F'}, iters, 72,
+               startdir=180)
+    
 
+koch_burst(4)
 
 
